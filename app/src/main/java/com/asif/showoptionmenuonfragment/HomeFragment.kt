@@ -1,9 +1,13 @@
 package com.asif.showoptionmenuonfragment
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_home.view.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -13,7 +17,9 @@ private const val ARG_PARAM2 = "param2"
 
 
 class HomeFragment : Fragment() {
-
+    private val arrayListItem =
+        arrayListOf("Test1", "Test2", "Test3", "Test4", "Test5", "Test6", "Test7", "Test8", "Test9")
+    private val itemArrayList = HashMap<String, Item>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +32,32 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+
+        for (index in arrayListItem.indices) {
+            itemArrayList[arrayListItem[index]] = Item(
+                arrayListItem[index], isAdd = false, isEdit = false,
+                isDelete = false,
+                isView = false
+            )
+        }
+        view.recyclerView.setHasFixedSize(true)
+        view.recyclerView.layoutManager = LinearLayoutManager(activity)
+        view.recyclerView.adapter = ItemAdapter(
+            mContext = activity as Context,
+            itemArrayList = itemArrayList, itemLabel = arrayListItem, mListener = object : OnItemClick {
+                override fun OnClickItemGet(item: HashMap<String,Item>) {
+                    Log.e("Log", item.toString())
+                }
+            }
+        )
+        view.button.setOnClickListener {
+            Log.e("LOG", "")
+        }
+
+
+        return view
     }
 
 
